@@ -18,6 +18,8 @@ people = pd.concat(df_list, ignore_index = True)
 
 df = pd.read_csv('file1.csv')
 
+# Restructuring untidy table
+
 df = pd.melt(
     frame = df, # dataframe you want to melt
     id_vars = ['name', 'gender', 'age'], # column(s) of the old df you want to keep
@@ -36,3 +38,31 @@ df = df.drop_duplicates()
 duplicates = df.duplicated()
 print(duplicates.value_counts())
 
+# Split by index (e.g. splits 'birthdate' into 'month', 'day', and 'year')
+
+df['column1'] = df.old_col.str[0:2]
+df['column2'] = df.old_col.str[2:4]
+df['column3'] = df.old_col.str[4:]
+
+# Split by character (e.g. splits 'full_name' into 'first_name' and 'last_name')
+
+str_split = df.column.str.split('_')
+df['column1'] = str_split.str.get(0)
+df['column2'] = str_split.str.get(1)
+
+# String parsing using Regex
+
+df.column = df.column.replace('[\$]', '', regex = True) # Removes dollar signs from price column
+df.column = pd.to_numeric(df.column) # ...then converts price strings to ints or floats
+
+df.column = df.column.str.split('(\d+)', expand = True)[1] # Extract numbers from a string using Regex
+df.column = pd.to_numeric(df.column) # ...then convert to ints or floats in order to use them for operations
+
+# Missing values
+
+#1: Drop all rows with missing value
+df = df.dropna()
+df = df.dropna(subset = ['column1'])
+
+#2: Fill missing values with the mean of the column, or with some aggregate value
+df = df.fillna(value = {'col1': df.col1.mean(), 'col2': df.col2.mean()})
