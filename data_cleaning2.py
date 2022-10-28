@@ -66,3 +66,8 @@ df = df.dropna(subset = ['column1'])
 
 #2: Fill missing values with the mean of the column, or with some aggregate value
 df = df.fillna(value = {'col1': df.col1.mean(), 'col2': df.col2.mean()})
+
+# Data deletion
+
+df.dropna(inplace = True) # listwise deletion
+df.dropna(subset = ['col1', 'col2'], inplace = True, how = 'any') # pairwise deletion
